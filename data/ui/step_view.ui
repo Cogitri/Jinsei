@@ -17,9 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.JInsei">
+<interface domain="dev.Cogitri.Jinsei">
   <requires lib="gtk+" version="4.0"/>
-  <template class="JInseiStepView" parent="JInseiView">
+  <template class="JinseiStepView" parent="JinseiView">
     <property name="empty-subtitle" translatable="yes">You can use the &lt;b&gt;+&lt;/b&gt; button to add a new activity.</property>
     <property name="icon-name">steps-symbolic</property>
     <property name="name">Steps</property>
