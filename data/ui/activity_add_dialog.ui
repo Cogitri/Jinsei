@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.Health">
+<interface domain="dev.Cogitri.JInsei">
   <requires lib="gtk+" version="3.99"/>
   <requires lib="libhandy" version="1.0"/>
   <object class="GtkAdjustment" id="steps_adjustment">
@@ -57,7 +57,7 @@
       <widget name="calories_burned_spin_button"/>
     </widgets>
   </object>
-  <template class="HealthActivityAddDialog" parent="GtkDialog">
+  <template class="JInseiActivityAddDialog" parent="GtkDialog">
     <property name="use-header-bar">1</property>
     <property name="modal">1</property>
     <property name="destroy-with-parent">1</property>
@@ -111,7 +111,7 @@
   <object class="AdwActionRow" id="date_selector_actionrow">
     <property name="title" translatable="yes">Date</property>
     <child>
-      <object class="HealthDateSelector" id="date_selector">
+      <object class="JInseiDateSelector" id="date_selector">
         <property name="margin-start">6</property>
         <property name="margin-end">6</property>
         <property name="margin-top">6</property>
@@ -119,7 +119,7 @@
       </object>
     </child>
   </object>
-  <object class="HealthActivityTypeSelector" id="activity_type_selector">
+  <object class="JInseiActivityTypeSelector" id="activity_type_selector">
     <signal name="notify::selected_activity" handler="on_activity_type_selector_selected_activity" swapped="no"/>
   </object>
   <object class="AdwActionRow" id="activity_type_actionrow">
@@ -151,7 +151,7 @@
       </object>
     </child>
   </object>
-  <object class="HealthDistanceActionRow" id="distance_action_row">
+  <object class="JInseiDistanceActionRow" id="distance_action_row">
     <signal name="notify::value" handler="on_distance_action_row_changed" swapped="no"/>
     <signal name="input" handler="on_user_input" swapped="no"/>
   </object>

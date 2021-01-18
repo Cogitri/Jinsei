@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.Health">
+<interface domain="dev.Cogitri.JInsei">
   <requires lib="gtk+" version="4.0"/>
   <object class="GtkShortcutsWindow" id="shortcuts_window">
     <property name="modal">1</property>

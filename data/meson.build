@@ -62,10 +62,11 @@ gnome.compile_schemas(
   depend_files: 'dev.Cogitri.Jinsei.gschema.xml',
 )
 
-jinsei_generated_sources = gnome.compile_resources(
-  'jinsei-resources',
+gnome.compile_resources('jinsei',
   'dev.Cogitri.Jinsei.gresource.xml',
-  c_name: 'health'
+  gresource_bundle: true,
+  install: true,
+  install_dir: jinsei_data_dir,
 )
 
 subdir('icons')

@@ -17,7 +17,7 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.Health">
+<interface domain="dev.Cogitri.JInsei">
   <requires lib="gtk+" version="3.99"/>
   <requires lib="libhandy" version="1.0"/>
   <object class="GtkAdjustment" id="weight_adjustment">
@@ -25,7 +25,7 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <template class="HealthWeightAddDialog" parent="GtkDialog">
+  <template class="JInseiWeightAddDialog" parent="GtkDialog">
     <property name="use-header-bar">1</property>
     <property name="modal">1</property>
     <property name="destroy-with-parent">1</property>
@@ -66,7 +66,7 @@
                   <object class="AdwActionRow">
                     <property name="title" translatable="yes">Date</property>
                     <child>
-                      <object class="HealthDateSelector" id="date_selector">
+                      <object class="JInseiDateSelector" id="date_selector">
                         <property name="margin-start">6</property>
                         <property name="margin-end">6</property>
                         <property name="margin-top">6</property>

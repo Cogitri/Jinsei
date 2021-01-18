@@ -1,0 +1,4 @@
+data/dev.Cogitri.Jinsei.desktop.in
+data/dev.Cogitri.Jinsei.appdata.xml.in
+data/dev.Cogitri.Jinsei.gschema.xml
+src/window.ui
