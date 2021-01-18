@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Health
+Exec=@APPLICATION_ID@
+Icon=@APPLICATION_ID@
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;MedicalSoftware;
+StartupNotify=true

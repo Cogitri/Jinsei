@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  step_view.ui
+
+  Copyright 2020-2021 Rasmus Thomsen <oss@cogitri.dev>
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<interface domain="dev.Cogitri.Health">
+  <requires lib="gtk+" version="4.0"/>
+  <template class="HealthStepView" parent="HealthView">
+    <property name="empty-subtitle" translatable="yes">You can use the &lt;b&gt;+&lt;/b&gt; button to add a new activity.</property>
+    <property name="icon-name">steps-symbolic</property>
+    <property name="name">Steps</property>
+    <property name="title" translatable="yes">Steps</property>
+    <property name="view-title" translatable="yes">Steps</property>
+  </template>
+</interface>

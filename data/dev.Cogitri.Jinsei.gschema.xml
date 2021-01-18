@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="dev.Cogitri.Health">
+  <enum id="dev.Cogitri.Health.Units">
+    <value nick="imperial" value="0"/>
+    <value nick="metric" value="1"/>
+  </enum>
+
+  <schema id="dev.Cogitri.Health" path="/dev/Cogitri/Health/" gettext-domain="dev.Cogitri.Health">
+    <key name="current-view-id" type="u">
+      <default>0</default>
+      <summary>Last opened view</summary>
+      <description>The last view the user had opened, for restoring it on start</description>
+    </key>
+    <key name="did-initial-setup" type="b">
+      <default>false</default>
+      <summary>First time setup done</summary>
+      <description>Whether the user has completed the setup wizard</description>
+    </key>
+    <key name="recent-activity-types" type="as">
+      <default>[]</default>
+      <summary>List of recent activity types</summary>
+      <description>Activity types the user used recently, to be shown first in the activity types selector's list</description>
+    </key>
+    <key name="sync-provider-setup-google-fit" type="b">
+      <default>false</default>
+      <summary>Google Fit Sync-Provider setup</summary>
+      <description>Whether Google Fit has been setup as sync provider</description>
+    </key>
+    <key name="timestamp-last-sync-google-fit" type="s">
+      <default>"1970-01-01T00:00:01Z"</default>
+      <summary>Last sync with Google Fit</summary>
+      <description>The last time we synched steps, weight etc. with Google Fit</description>
+    </key>
+    <key name="unitsystem" enum="dev.Cogitri.Health.Units">
+      <default>'metric'</default>
+      <summary>Unitsystem used</summary>
+      <description>The unitsystem the user chose, e.g. for cm vs inch for height</description>
+    </key>
+    <key name="user-age" type="u">
+      <default>0</default>
+      <summary>User age</summary>
+      <description>The age of the user.</description>
+    </key>
+    <key name="user-height" type="u">
+      <default>0</default>
+      <summary>User height</summary>
+      <description>The height of the user.</description>
+    </key>
+    <key name="user-stepgoal" type="u">
+      <default>10000</default>
+      <summary>User stepgoal</summary>
+      <description>The amount of steps the user wants to reach daily.</description>
+    </key>
+    <key name="user-weightgoal" type="d">
+      <default>-1</default>
+      <summary>User weightgoal</summary>
+      <description>The weight the user wants to reach.</description>
+    </key>
+    <key name="window-height" type="i">
+      <default>-1</default>
+      <summary>Window height</summary>
+      <description>The height of the window.</description>
+    </key>
+    <key name="window-is-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+      <description>Whether the window is maximized.</description>
+    </key>
+    <key name="window-width" type="i">
+      <default>-1</default>
+      <summary>Window width</summary>
+      <description>The width of the window.</description>
+    </key>
+  </schema>
+</schemalist>
