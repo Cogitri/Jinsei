@@ -1,5 +1,5 @@
 use crate::core::i18n;
-use chrono::{DateTime, Duration, FixedOffset};
+use chrono::{DateTime, Duration, FixedOffset, Utc};
 
 bitflags::bitflags! {
     pub struct ActivityDataPoints: u16 {
@@ -14,16 +14,33 @@ bitflags::bitflags! {
 #[derive(Debug)]
 pub struct Activity {
     pub activity_type: ActivityType,
-    pub calories_burned: u32,
+    pub calories_burned: Option<u32>,
     pub date: DateTime<FixedOffset>,
-    pub distance: uom::si::u32::Length,
-    pub heart_rate_avg: u32,
-    pub heart_rate_max: u32,
-    pub heart_rate_min: u32,
+    pub distance: Option<uom::si::u32::Length>,
+    pub heart_rate_avg: Option<u32>,
+    pub heart_rate_max: Option<u32>,
+    pub heart_rate_min: Option<u32>,
     pub duration: Duration,
-    pub steps: u32,
+    pub steps: Option<u32>,
 }
-#[derive(Debug)]
+
+impl Default for Activity {
+    fn default() -> Self {
+        Self {
+            activity_type: ActivityType::OtherSports,
+            calories_burned: None,
+            date: Utc::now().into(),
+            distance: None,
+            heart_rate_avg: None,
+            heart_rate_max: None,
+            heart_rate_min: None,
+            duration: Duration::seconds(0),
+            steps: None,
+        }
+    }
+}
+
+#[derive(Debug, num_derive::FromPrimitive, num_derive::ToPrimitive)]
 pub enum ActivityType {
     Basketball,
     Bicycling,

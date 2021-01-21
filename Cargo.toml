@@ -51,6 +51,13 @@ features = ["gettext-system"]
 [dependencies.regex]
 version = "1.4.3"
 
+[dependencies.num-derive]
+version = "0.3"
+
+[dependencies.num-traits]
+version = "0.2"
+
 [dependencies.uom]
+default-features = false
 version = "0.31"
-features = ["u32"]
+features = ["autoconvert", "f32", "si", "u32"]

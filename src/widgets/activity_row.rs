@@ -123,31 +123,32 @@ mod imp {
             if activity_info
                 .available_data_points
                 .contains(ActivityDataPoints::CaloriesBurned)
-                && activity.calories_burned != 0
             {
+                if let Some(calories_burned) = activity.calories_burned {
                 self.calories_burned_label.set_label(&i18n_f(
                     "{} Calories",
-                    &[&activity.calories_burned.to_string()],
+                    &[&calories_burned.to_string()],
                 ));
+            }
             }
 
             if activity_info
                 .available_data_points
                 .contains(ActivityDataPoints::HeartRate)
             {
-                if activity.heart_rate_avg != 0 {
+                if activity.heart_rate_avg.unwrap_or(0) != 0 {
                     self.heart_rate_average_label
-                        .set_text(&activity.heart_rate_avg.to_string());
+                        .set_text(&activity.heart_rate_avg.unwrap().to_string());
                     self.heart_rate_average_row.set_visible(true);
                 }
-                if activity.heart_rate_max != 0 {
+                if activity.heart_rate_max.unwrap_or(0) != 0 {
                     self.heart_rate_maximum_label
-                        .set_text(&activity.heart_rate_max.to_string());
+                        .set_text(&activity.heart_rate_max.unwrap().to_string());
                     self.heart_rate_maximum_row.set_visible(true);
                 }
-                if activity.heart_rate_min != 0 {
+                if activity.heart_rate_min.unwrap_or(0) != 0 {
                     self.heart_rate_minimum_label
-                        .set_text(&activity.heart_rate_min.to_string());
+                        .set_text(&activity.heart_rate_min.unwrap().to_string());
                     self.heart_rate_minimum_row.set_visible(true);
                 }
             }
@@ -155,28 +156,27 @@ mod imp {
             if activity_info
                 .available_data_points
                 .contains(ActivityDataPoints::Distance)
-                && activity.distance != uom::si::u32::Length::new::<meter>(0)
             {
+                if let Some(distance) = activity.distance {
                 self.distance_row.set_visible(true);
 
                 if self.settings.get_unitsystem() == Unitsystem::Imperial {
                     self.distance_label.set_label(&format!(
                         "{}",
-                        activity
-                            .distance
+                            distance
                             .clone()
                             .into_format_args(meter, Abbreviation)
                     ));
                 } else {
                     self.distance_label.set_label(&format!(
                         "{}",
-                        activity
-                            .distance
+                            distance
                             .clone()
                             .into_format_args(yard, Abbreviation)
                     ));
                 };
             }
+        }
         }
     }
 }

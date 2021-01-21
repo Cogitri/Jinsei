@@ -20,22 +20,26 @@ run_command(
 )
 
 sources = files(
-  'main.rs',
   'config.rs',
   'core/application.rs',
-  'core/mod.rs',
-  'core/settings.rs',
   'core/database.rs',
   'core/i18n.rs',
-  'model/mod.rs',
+  'core/mod.rs',
+  'core/settings.rs',
+  'main.rs',
   'model/activity.rs',
-  'model/steps_graph_model.rs',
-  'model/weight_graph_model.rs',
-  'windows/window.rs',
-  'windows/mod.rs',
+  'model/mod.rs',
+  'model/graph_model.rs',
+  'model/graph_model_steps.rs',
+  'model/graph_model_weight.rs',
   'views/graph_view.rs',
-  'views/view.rs',
   'views/mod.rs',
+  'views/view.rs',
+  'views/view_steps.rs',
+  'widgets/activity_row.rs',
+  'widgets/mod.rs',
+  'windows/mod.rs',
+  'windows/window.rs',
 )
 
 cargo_script = find_program(join_paths(meson.source_root(), 'build-aux/cargo.sh'))
