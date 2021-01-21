@@ -1,10 +1,10 @@
-use gtk::prelude::*;
+use gdk::subclass::prelude::*;
+use gtk::{prelude::*, subclass::prelude::*};
 use gtk::{glib, CompositeTemplate};
 
 mod imp {
     use super::*;
     use glib::subclass::{self, Property};
-    use gtk::subclass::prelude::*;
     use std::cell::RefCell;
 
     #[derive(Debug, CompositeTemplate)]
@@ -154,5 +154,11 @@ glib::wrapper! {
 impl HealthView {
     pub fn new<P: glib::IsA<gtk::Application>>(app: &P) -> Self {
         glib::Object::new(&[("application", app)]).expect("Failed to create HealthView")
+    }
+}
+
+unsafe impl<T: WidgetImpl> IsSubclassable<T> for HealthView {
+    fn override_vfuncs(class: &mut glib::Class<Self>) {
+        <gtk::Widget as IsSubclassable<T>>::override_vfuncs(class);
     }
 }
