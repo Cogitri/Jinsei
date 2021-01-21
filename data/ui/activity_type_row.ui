@@ -17,9 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.Jinsei">
+<interface domain="dev.Cogitri.Health">
   <requires lib="gtk+" version="4.0"/>
-  <template class="JinseiActivityTypeRow" parent="GtkListBoxRow">
+  <template class="HealthActivityTypeRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

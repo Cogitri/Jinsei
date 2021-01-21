@@ -1,4 +1,4 @@
-project('Jinsei',  
+project('Health',  
           version: '0.1.0',
     meson_version: '>= 0.50.0',
   default_options: [ 'warning_level=2',
@@ -21,9 +21,9 @@ else
   profile = ''
 endif
 
-application_id = 'dev.Cogitri.Jinsei@0@'.format(profile)
-jinsei_version = meson.project_version() + version_suffix
-jinsei_data_dir = get_option('prefix') / get_option('datadir') / application_id
+application_id = 'dev.Cogitri.Health@0@'.format(profile)
+health_version = meson.project_version() + version_suffix
+health_data_dir = get_option('prefix') / get_option('datadir') / application_id
 
 subdir('data')
 subdir('src')

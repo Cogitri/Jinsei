@@ -1,13 +1,23 @@
 [package]
-name = "Jinsei"
+name = "health"
 version = "0.1.0"
 edition = "2018"
+
+[dependencies.bitflags]
+version = "1.0"
 
 [dependencies.chrono]
 version = "0.4"
 
 [dependencies.paste]
 version = "1.0"
+
+[dependencies.lazy_static]
+version = "1.4"
+
+[dependencies.gdk]
+git = "https://github.com/gtk-rs/gtk4-rs"
+package = "gdk4"
 
 [dependencies.gtk]
 git = "https://github.com/gtk-rs/gtk4-rs"
@@ -21,9 +31,22 @@ features = ["v2_60"]
 git = "https://github.com/gtk-rs/gtk-rs"
 features = ["v2_60"]
 
+[dependencies.pango]
+git = "https://github.com/gtk-rs/gtk-rs"
+
+[dependencies.pangocairo]
+git = "https://github.com/gtk-rs/gtk-rs"
+
 [dependencies.libadwaita]
 git = "https://gitlab.gnome.org/bilelmoussaoui/libadwaita-rs"
 
 [dependencies.gettext-rs]
 version = "0.4.4"
 features = ["gettext-system"]
+
+[dependencies.regex]
+version = "1.4.3"
+
+[dependencies.uom]
+version = "0.31"
+features = ["u32"]

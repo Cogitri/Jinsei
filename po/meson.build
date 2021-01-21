@@ -1,1 +1,1 @@
-i18n.gettext('jinsei', preset: 'glib')
+i18n.gettext('dev.Cogitri.Health', preset: 'glib')

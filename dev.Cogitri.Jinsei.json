@@ -1,5 +1,5 @@
 {
-    "app-id" : "dev.Cogitri.Jinsei",
+    "app-id" : "dev.Cogitri.Health",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "3.38",
     "sdk" : "org.gnome.Sdk",
@@ -43,7 +43,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "file:///var/home/rasmus/Projects/Jinsei"
+                    "url" : "file:///var/home/rasmus/Projects/Health"
                 }
             ]
         }

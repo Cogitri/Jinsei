@@ -2,13 +2,14 @@ use chrono::{DateTime, FixedOffset};
 use gio::prelude::*;
 use gio::Settings;
 
+#[derive(PartialEq)]
 pub enum Unitsystem {
-    Imperal,
+    Imperial,
     Metric,
 }
 
 #[derive(Debug)]
-pub struct JinseiSettings {
+pub struct HealthSettings {
     settings: Settings,
 }
 
@@ -32,10 +33,10 @@ macro_rules! settings_getter_setter {
     };
 }
 
-impl JinseiSettings {
+impl HealthSettings {
     pub fn new() -> Self {
         Self {
-            settings: Settings::new("dev.Cogitri.Jinsei"),
+            settings: Settings::new("dev.Cogitri.Health"),
         }
     }
 
@@ -71,7 +72,7 @@ impl JinseiSettings {
 
     pub fn get_unitsystem(&self) -> Unitsystem {
         match self.settings.get_enum("unitsystem") {
-            0 => Unitsystem::Imperal,
+            0 => Unitsystem::Imperial,
             1 => Unitsystem::Metric,
             _ => std::unreachable!(),
         }

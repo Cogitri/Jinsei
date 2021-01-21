@@ -2,7 +2,7 @@ conf = configuration_data ()
 conf.set('APPLICATION_ID', application_id)
 
 configured_desktop_file = configure_file(
-  input: 'dev.Cogitri.Jinsei.desktop.in.in',
+  input: 'dev.Cogitri.Health.desktop.in.in',
   output: '@BASENAME@',
   configuration: conf,
 )
@@ -24,7 +24,7 @@ if desktop_utils.found()
 endif
 
 configured_appstream_file = configure_file(
-  input: 'dev.Cogitri.Jinsei.metainfo.xml.in.in',
+  input: 'dev.Cogitri.Health.metainfo.xml.in.in',
   output: '@BASENAME@',
   configuration: conf,
 )
@@ -45,7 +45,7 @@ if appstream_util.found()
 endif
 
 install_data(
-  'dev.Cogitri.Jinsei.gschema.xml',
+  'dev.Cogitri.Health.gschema.xml',
   rename: '@0@.gschema.xml'.format(application_id),
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
@@ -59,14 +59,14 @@ endif
 
 gnome.compile_schemas(
   build_by_default: true,
-  depend_files: 'dev.Cogitri.Jinsei.gschema.xml',
+  depend_files: 'dev.Cogitri.Health.gschema.xml',
 )
 
-gnome.compile_resources('jinsei',
-  'dev.Cogitri.Jinsei.gresource.xml',
+gnome.compile_resources('dev.Cogitri.Health',
+  'dev.Cogitri.Health.gresource.xml',
   gresource_bundle: true,
   install: true,
-  install_dir: jinsei_data_dir,
+  install_dir: health_data_dir,
 )
 
 subdir('icons')

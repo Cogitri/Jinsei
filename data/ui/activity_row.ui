@@ -17,10 +17,10 @@
   You should have received a copy of the GNU General Public License
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<interface domain="dev.Cogitri.Jinsei">
+<interface domain="dev.Cogitri.Health">
   <requires lib="gtk+" version="3.99"/>
   <requires lib="libhandy" version="1.0"/>
-  <template class="JinseiActivityRow" parent="GtkListBoxRow">
+  <template class="HealthActivityRow" parent="GtkListBoxRow">
     <property name="height_request">60</property>
     <style>
       <class name="row"/>
@@ -98,29 +98,29 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow" id="average_heart_rate_row">
+                  <object class="AdwActionRow" id="heart_rate_average_row">
                     <property name="title" translatable="yes">Average Heart Rate</property>
                     <property name="visible">0</property>
                     <child>
-                      <object class="GtkLabel" id="average_heart_rate_label"/>
+                      <object class="GtkLabel" id="heart_rate_average_label"/>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow" id="minimum_heart_rate_row">
+                  <object class="AdwActionRow" id="heart_rate_minimum_row">
                     <property name="title" translatable="yes">Minimum Heart Rate</property>
                     <property name="visible">0</property>
                     <child>
-                      <object class="GtkLabel" id="minimum_heart_rate_label"/>
+                      <object class="GtkLabel" id="heart_rate_minimum_label"/>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow" id="maximum_heart_rate_row">
+                  <object class="AdwActionRow" id="heart_rate_maximum_row">
                     <property name="title" translatable="yes">Maximum Heart Rate</property>
                     <property name="visible">0</property>
                     <child>
-                      <object class="GtkLabel" id="maximum_heart_rate_label"/>
+                      <object class="GtkLabel" id="heart_rate_maximum_label"/>
                     </child>
                   </object>
                 </child>

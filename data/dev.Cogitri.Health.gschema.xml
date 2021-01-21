@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="dev.Cogitri.Jinsei">
-  <enum id="dev.Cogitri.Jinsei.Units">
+<schemalist gettext-domain="dev.Cogitri.Health">
+  <enum id="dev.Cogitri.Health.Units">
     <value nick="imperial" value="0"/>
     <value nick="metric" value="1"/>
   </enum>
 
-  <schema id="dev.Cogitri.Jinsei" path="/dev/Cogitri/Jinsei/" gettext-domain="dev.Cogitri.Jinsei">
+  <schema id="dev.Cogitri.Health" path="/dev/Cogitri/Health/" gettext-domain="dev.Cogitri.Health">
     <key name="current-view-id" type="u">
       <default>0</default>
       <summary>Last opened view</summary>
@@ -31,7 +31,7 @@
       <summary>Last sync with Google Fit</summary>
       <description>The last time we synched steps, weight etc. with Google Fit</description>
     </key>
-    <key name="unitsystem" enum="dev.Cogitri.Jinsei.Units">
+    <key name="unitsystem" enum="dev.Cogitri.Health.Units">
       <default>'metric'</default>
       <summary>Unitsystem used</summary>
       <description>The unitsystem the user chose, e.g. for cm vs inch for height</description>
