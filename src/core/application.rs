@@ -81,7 +81,7 @@ glib::wrapper! {
 impl HealthApplication {
     pub fn new() -> Self {
         glib::Object::new(&[
-            ("application_id", &config::APPLICATION_ID.to_string()),
+            ("application-id", &config::APPLICATION_ID.to_string()),
             ("flags", &gio::ApplicationFlags::FLAGS_NONE),
         ])
         .expect("Failed to create HealthApplication")

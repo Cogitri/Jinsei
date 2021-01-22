@@ -1,10 +1,12 @@
+use crate::views::HealthViewSteps;
+use gdk::subclass::prelude::ObjectSubclass;
 use gtk::prelude::*;
 use gtk::{gio, glib, CompositeTemplate};
 
 mod imp {
     use super::*;
     use crate::core::{HealthDatabase, HealthSettings};
-    use crate::views::{HealthView, HealthViewSteps};
+    use crate::views::HealthView;
     use glib::subclass;
     use gtk::subclass::prelude::*;
     use std::cell::RefCell;
@@ -114,5 +116,19 @@ glib::wrapper! {
 impl HealthWindow {
     pub fn new<P: glib::IsA<gtk::Application>>(app: &P) -> Self {
         glib::Object::new(&[("application", app)]).expect("Failed to create HealthWindow")
+    }
+
+    pub fn update(&self) {
+        for (mode, view) in &imp::HealthWindow::from_instance(self).views {
+            match mode {
+                imp::ViewMode::STEPS => {
+                    let v = view.clone().downcast::<HealthViewSteps>().unwrap();
+                    let fut = v.update();
+                    //FIXME: don't block here!
+                    glib::MainContext::default().block_on(fut);
+                }
+                _ => unimplemented!(),
+            }
+        }
     }
 }

@@ -9,12 +9,13 @@ mod imp {
     use chrono::Duration;
     use glib::{subclass, Cast};
     use gtk::subclass::prelude::*;
+    use std::cell::RefCell;
 
     #[derive(Debug)]
     pub struct HealthViewSteps {
         settings: HealthSettings,
         steps_graph_view: Option<HealthGraphView>,
-        steps_graph_model: HealthGraphModelSteps,
+        steps_graph_model: RefCell<HealthGraphModelSteps>,
     }
 
     impl ObjectSubclass for HealthViewSteps {
@@ -33,7 +34,7 @@ mod imp {
             Self {
                 settings,
                 steps_graph_view: None,
-                steps_graph_model,
+                steps_graph_model: RefCell::new(steps_graph_model),
             }
         }
     }
@@ -47,8 +48,9 @@ mod imp {
     }
 
     impl HealthViewSteps {
-        pub async fn update(&mut self, obj: super::HealthViewSteps) {
-            if let Err(e) = self.steps_graph_model.reload(Duration::days(30)).await {
+        pub async fn update(&self, obj: &super::HealthViewSteps) {
+            let mut steps_graph_model = self.steps_graph_model.borrow_mut();
+            if let Err(e) = steps_graph_model.reload(Duration::days(30)).await {
                 glib::g_warning!(
                     crate::config::LOG_DOMAIN,
                     "Failed to reload step data: {}",
@@ -56,25 +58,22 @@ mod imp {
                 );
             }
 
-            let view = obj.upcast::<HealthView>();
+            let view = obj.clone().upcast::<HealthView>();
             view.set_title(i18n_f(
                 "Today's steps: {}",
-                &[&self
-                    .steps_graph_model
+                &[&steps_graph_model
                     .get_today_step_count()
                     .unwrap_or(0)
                     .to_string()],
             ));
 
             let goal_label = view.get_goal_label();
-            let streak_count = self
-                .steps_graph_model
-                .get_streak_count_today(self.settings.get_user_stepgoal());
+            let streak_count =
+                steps_graph_model.get_streak_count_today(self.settings.get_user_stepgoal());
 
             match streak_count {
                 0 => {
-                    let previous_streak = self
-                        .steps_graph_model
+                    let previous_streak = steps_graph_model
                         .get_streak_count_yesterday(self.settings.get_user_stepgoal());
                     if previous_streak == 0 {
                         goal_label.set_text (&i18n("No streak yet. Reach your stepgoal for multiple days to start a streak!"));
@@ -92,8 +91,8 @@ mod imp {
             }
 
             if let Some(view) = &self.steps_graph_view {
-                view.set_points(self.steps_graph_model.to_points());
-            } else if !self.steps_graph_model.is_empty() {
+                view.set_points(steps_graph_model.to_points());
+            } else if !steps_graph_model.is_empty() {
                 let steps_graph_view = HealthGraphView::new();
 
                 steps_graph_view.set_hover_func(Some(Box::new(|p| {
@@ -121,5 +120,9 @@ glib::wrapper! {
 impl HealthViewSteps {
     pub fn new() -> Self {
         glib::Object::new(&[]).expect("Failed to create HealthViewSteps")
+    }
+
+    pub async fn update(&self) {
+        imp::HealthViewSteps::from_instance(self).update(self).await;
     }
 }
