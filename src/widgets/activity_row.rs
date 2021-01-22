@@ -122,19 +122,17 @@ mod imp {
 
             if activity_info
                 .available_data_points
-                .contains(ActivityDataPoints::CaloriesBurned)
+                .contains(ActivityDataPoints::CALORIES_BURNED)
             {
                 if let Some(calories_burned) = activity.calories_burned {
-                self.calories_burned_label.set_label(&i18n_f(
-                    "{} Calories",
-                    &[&calories_burned.to_string()],
-                ));
-            }
+                    self.calories_burned_label
+                        .set_label(&i18n_f("{} Calories", &[&calories_burned.to_string()]));
+                }
             }
 
             if activity_info
                 .available_data_points
-                .contains(ActivityDataPoints::HeartRate)
+                .contains(ActivityDataPoints::HEART_RATE)
             {
                 if activity.heart_rate_avg.unwrap_or(0) != 0 {
                     self.heart_rate_average_label
@@ -155,28 +153,24 @@ mod imp {
 
             if activity_info
                 .available_data_points
-                .contains(ActivityDataPoints::Distance)
+                .contains(ActivityDataPoints::DISTANCE)
             {
                 if let Some(distance) = activity.distance {
-                self.distance_row.set_visible(true);
+                    self.distance_row.set_visible(true);
 
-                if self.settings.get_unitsystem() == Unitsystem::Imperial {
-                    self.distance_label.set_label(&format!(
-                        "{}",
-                            distance
-                            .clone()
-                            .into_format_args(meter, Abbreviation)
-                    ));
-                } else {
-                    self.distance_label.set_label(&format!(
-                        "{}",
-                            distance
-                            .clone()
-                            .into_format_args(yard, Abbreviation)
-                    ));
-                };
+                    if self.settings.get_unitsystem() == Unitsystem::Imperial {
+                        self.distance_label.set_label(&format!(
+                            "{}",
+                            distance.clone().into_format_args(meter, Abbreviation)
+                        ));
+                    } else {
+                        self.distance_label.set_label(&format!(
+                            "{}",
+                            distance.clone().into_format_args(yard, Abbreviation)
+                        ));
+                    };
+                }
             }
-        }
         }
     }
 }

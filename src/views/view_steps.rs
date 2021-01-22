@@ -1,5 +1,4 @@
 use crate::views::HealthView;
-use futures_util::FutureExt;
 use gdk::subclass::prelude::*;
 
 mod imp {

@@ -3,14 +3,13 @@ use chrono::{DateTime, Duration, FixedOffset, Utc};
 
 bitflags::bitflags! {
     pub struct ActivityDataPoints: u16 {
-        const CaloriesBurned = 0b000001;
-        const Distance = 0b000010;
-        const Duration = 0b000100;
-        const HeartRate = 0b001000;
-        const StepCount = 0b010000;
+        const CALORIES_BURNED = 0b000001;
+        const DISTANCE = 0b000010;
+        const DURATION = 0b000100;
+        const HEART_RATE = 0b001000;
+        const STEP_COUNT = 0b010000;
     }
 }
-
 #[derive(Debug)]
 pub struct Activity {
     pub activity_type: ActivityType,
@@ -77,172 +76,172 @@ impl From<ActivityType> for ActivityInfo {
         match activity_type {
             ActivityType::Basketball => ActivityInfo::new(
                 ActivityType::Basketball,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 6,
                 i18n("Basketball"),
             ),
             ActivityType::Bicycling => ActivityInfo::new(
                 ActivityType::Bicycling,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE,
                 10,
                 i18n("Bicycling"),
             ),
             ActivityType::Boxing => ActivityInfo::new(
                 ActivityType::Boxing,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 7,
                 i18n("Boxing"),
             ),
             ActivityType::Dancing => ActivityInfo::new(
                 ActivityType::Dancing,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 8,
                 i18n("Dancing"),
             ),
             ActivityType::Football => ActivityInfo::new(
                 ActivityType::Football,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 3,
                 i18n("Football"),
             ),
             ActivityType::Golf => ActivityInfo::new(
                 ActivityType::Golf,
-                ActivityDataPoints::CaloriesBurned | ActivityDataPoints::Duration,
+                ActivityDataPoints::CALORIES_BURNED | ActivityDataPoints::DURATION,
                 4,
                 i18n("Golf"),
             ),
             ActivityType::Hiking => ActivityInfo::new(
                 ActivityType::Hiking,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::StepCount
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::STEP_COUNT
+                    | ActivityDataPoints::DISTANCE,
                 8,
                 i18n("Hiking"),
             ),
             ActivityType::Hockey => ActivityInfo::new(
                 ActivityType::Hockey,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 10,
                 i18n("Hockey"),
             ),
             ActivityType::HorseRiding => ActivityInfo::new(
                 ActivityType::HorseRiding,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE,
                 5,
                 i18n("Horse Riding"),
             ),
             ActivityType::OtherSports => ActivityInfo::new(
                 ActivityType::OtherSports,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 9,
                 i18n("Other Sports"),
             ),
             ActivityType::RollerBlading => ActivityInfo::new(
                 ActivityType::RollerBlading,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE,
                 10,
                 i18n("Rollerblading"),
             ),
             ActivityType::Running => ActivityInfo::new(
                 ActivityType::Running,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance
-                    | ActivityDataPoints::StepCount,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE
+                    | ActivityDataPoints::STEP_COUNT,
                 15,
                 i18n("Running"),
             ),
             ActivityType::Skiing => ActivityInfo::new(
                 ActivityType::Skiing,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE,
                 12,
                 i18n("Skiing"),
             ),
             ActivityType::Soccer => ActivityInfo::new(
                 ActivityType::Soccer,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 8,
                 i18n("Soccer"),
             ),
             ActivityType::Softball => ActivityInfo::new(
                 ActivityType::Softball,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 5,
                 i18n("Softball"),
             ),
             ActivityType::Swimming => ActivityInfo::new(
                 ActivityType::Swimming,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE,
                 12,
                 i18n("Swimming"),
             ),
             ActivityType::Tennis => ActivityInfo::new(
                 ActivityType::Tennis,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 6,
                 i18n("Tennis"),
             ),
             ActivityType::TrackAndField => ActivityInfo::new(
                 ActivityType::TrackAndField,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE,
                 5,
                 i18n("Track And Field"),
             ),
             ActivityType::VolleyBall => ActivityInfo::new(
                 ActivityType::VolleyBall,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance
-                    | ActivityDataPoints::StepCount,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE
+                    | ActivityDataPoints::STEP_COUNT,
                 5,
                 i18n("Volleyball"),
             ),
             ActivityType::Walking => ActivityInfo::new(
                 ActivityType::Walking,
-                ActivityDataPoints::CaloriesBurned
-                    | ActivityDataPoints::Duration
-                    | ActivityDataPoints::HeartRate
-                    | ActivityDataPoints::Distance
-                    | ActivityDataPoints::StepCount,
+                ActivityDataPoints::CALORIES_BURNED
+                    | ActivityDataPoints::DURATION
+                    | ActivityDataPoints::HEART_RATE
+                    | ActivityDataPoints::DISTANCE
+                    | ActivityDataPoints::STEP_COUNT,
                 5,
                 i18n("Walking"),
             ),
