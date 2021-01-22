@@ -1,7 +1,6 @@
-use std::convert::TryInto;
-
 use crate::{core::HealthDatabase, views::Point};
 use chrono::{DateTime, Duration, FixedOffset};
+use std::convert::TryInto;
 
 #[derive(Debug)]
 pub struct Steps {
@@ -37,17 +36,42 @@ impl HealthGraphModelSteps {
             .map(|s| s.steps)
     }
 
-    pub fn get_streak_count(&self, date: DateTime, step_goal: u32) -> u32 {
-        todo!();
+    pub fn get_streak_count_today(&self, step_goal: u32) -> u32 {
+        let vec: Vec<&Steps> = self.vec.iter().collect();
+        HealthGraphModelSteps::get_streak_count(&vec, step_goal)
     }
 
-    pub async fn reload(&mut self) -> Result<(), glib::Error> {
+    pub fn get_streak_count_yesterday(&self, step_goal: u32) -> u32 {
+        let today = chrono::Local::now().date();
+        let vec: Vec<&Steps> = self.vec.iter().filter(|s| s.date.date() != today).collect();
+
+        HealthGraphModelSteps::get_streak_count(&vec, step_goal)
+    }
+
+    fn get_streak_count(steps: &[&Steps], step_goal: u32) -> u32 {
+        let mut streak: u32 = 0;
+        let last_date = steps.get(0).unwrap().date;
+
+        for x in steps.iter() {
+            if last_date.signed_duration_since(x.date).num_days() as u32 == streak
+                && x.steps >= step_goal
+            {
+                streak += 1;
+            } else {
+                break;
+            }
+        }
+
+        return streak;
+    }
+
+    pub async fn reload(&mut self, duration: Duration) -> Result<(), glib::Error> {
         //FIXME: Allow reloading for more than 30 days
         self.vec = self
             .database
             .get_steps(
                 chrono::Local::now()
-                    .checked_sub_signed(Duration::days(30))
+                    .checked_sub_signed(duration)
                     .unwrap()
                     .into(),
             )
@@ -85,5 +109,9 @@ impl HealthGraphModelSteps {
         }
 
         ret
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.vec.is_empty()
     }
 }

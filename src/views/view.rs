@@ -157,6 +157,10 @@ impl HealthView {
         glib::Object::new(&[("application", app)]).expect("Failed to create HealthView")
     }
 
+    pub fn get_goal_label(&self) -> gtk::Label {
+        imp::HealthView::from_instance(self).goal_label.get()
+    }
+
     pub fn get_stack(&self) -> gtk::Stack {
         imp::HealthView::from_instance(self).stack.get()
     }
