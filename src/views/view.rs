@@ -1,6 +1,7 @@
+use crate::properties_setter_getter;
 use gdk::subclass::prelude::*;
-use gtk::{prelude::*, subclass::prelude::*};
 use gtk::{glib, CompositeTemplate};
+use gtk::{prelude::*, subclass::prelude::*};
 
 mod imp {
     use super::*;
@@ -155,6 +156,19 @@ impl HealthView {
     pub fn new<P: glib::IsA<gtk::Application>>(app: &P) -> Self {
         glib::Object::new(&[("application", app)]).expect("Failed to create HealthView")
     }
+
+    pub fn get_stack(&self) -> gtk::Stack {
+        imp::HealthView::from_instance(self).stack.get()
+    }
+
+    pub fn get_scrolled_window(&self) -> gtk::ScrolledWindow {
+        imp::HealthView::from_instance(self).scrolled_window.get()
+    }
+
+    properties_setter_getter!("empty_title", String);
+    properties_setter_getter!("icon_name", String);
+    properties_setter_getter!("title", String);
+    properties_setter_getter!("view_title", String);
 }
 
 unsafe impl<T: WidgetImpl> IsSubclassable<T> for HealthView {

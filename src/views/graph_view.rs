@@ -439,8 +439,8 @@ glib::wrapper! {
 }
 
 impl HealthGraphView {
-    pub fn new<P: glib::IsA<gtk::Application>>(app: &P) -> Self {
-        glib::Object::new(&[("application", app)]).expect("Failed to create HealthGraphView")
+    pub fn new() -> Self {
+        glib::Object::new(&[]).expect("Failed to create HealthGraphView")
     }
 
     pub fn set_hover_func(&self, hover_func: Option<Box<dyn Fn(&Point) -> String>>) {

@@ -29,7 +29,6 @@ sources = files(
   'main.rs',
   'model/activity.rs',
   'model/mod.rs',
-  'model/graph_model.rs',
   'model/graph_model_steps.rs',
   'model/graph_model_weight.rs',
   'views/graph_view.rs',
