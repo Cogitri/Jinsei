@@ -2,8 +2,8 @@
 macro_rules! properties_setter_getter {
     ($name:literal, $type:ty) => {
         paste::item! {
-            pub fn [< get_ $name >] (&self) -> $type {
-                self.get_property($name).unwrap().get().unwrap().unwrap()
+            pub fn [< get_ $name >] (&self) -> Option<$type> {
+                self.get_property($name).unwrap().get().unwrap()
             }
         }
         paste::item! {

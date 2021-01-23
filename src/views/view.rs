@@ -28,40 +28,34 @@ mod imp {
     }
 
     static PROPERTIES: [Property; 4] = [
-        Property("empty_subtitle", |name| {
+        Property("empty-subtitle", |name| {
             glib::ParamSpec::string(
                 name,
-                "empty_subtitle",
-                "empty_subtitle",
+                "empty-subtitle",
+                "empty-subtitle",
                 None,
-                glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT,
+                glib::ParamFlags::READWRITE,
             )
         }),
-        Property("icon_name", |name| {
+        Property("icon-name", |name| {
             glib::ParamSpec::string(
                 name,
-                "icon_name",
-                "icon_name",
+                "icon-name",
+                "icon-name",
                 None,
-                glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT,
+                glib::ParamFlags::READWRITE,
             )
         }),
         Property("title", |name| {
-            glib::ParamSpec::string(
-                name,
-                "title",
-                "title",
-                None,
-                glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT,
-            )
+            glib::ParamSpec::string(name, "title", "title", None, glib::ParamFlags::READWRITE)
         }),
-        Property("view_title", |name| {
+        Property("view-title", |name| {
             glib::ParamSpec::string(
                 name,
-                "view_title",
-                "view_title",
+                "view-title",
+                "view-title",
                 None,
-                glib::ParamFlags::READWRITE | glib::ParamFlags::CONSTRUCT,
+                glib::ParamFlags::READWRITE,
             )
         }),
     ];
@@ -117,15 +111,18 @@ mod imp {
             let prop = &PROPERTIES[id];
 
             match *prop {
-                Property("empty_subtitle", ..) => self
+                Property("empty-subtitle", ..) => self
                     .subtitle_empty_view_label
-                    .set_label(value.get().unwrap().unwrap()),
-                Property("icon_name", ..) => {
+                    .set_label(value.get().unwrap().unwrap_or("")),
+                Property("icon-name", ..) => {
                     self.empty_icon.set_property_icon_name(value.get().unwrap())
                 }
-                Property("title", ..) => self.title_label.set_label(value.get().unwrap().unwrap()),
-                Property("view_title", ..) => {
-                    self.view_title.replace(value.get().unwrap().unwrap());
+                Property("title", ..) => self
+                    .title_label
+                    .set_label(value.get().unwrap().unwrap_or("")),
+                Property("view-title", ..) => {
+                    self.view_title
+                        .replace(value.get().unwrap().unwrap_or("".to_string()));
                 }
                 _ => unimplemented!(),
             }
@@ -135,12 +132,12 @@ mod imp {
             let prop = &PROPERTIES[id];
 
             match *prop {
-                Property("empty_subtitle", ..) => {
+                Property("empty-subtitle", ..) => {
                     self.subtitle_empty_view_label.get_label().to_value()
                 }
-                Property("icon_name", ..) => self.empty_icon.get_icon_name().unwrap().to_value(),
+                Property("icon-name", ..) => self.empty_icon.get_icon_name().to_value(),
                 Property("title", ..) => self.title_label.get_label().to_value(),
-                Property("view_title", ..) => self.view_title.borrow().to_value(),
+                Property("view-title", ..) => self.view_title.borrow().to_value(),
                 _ => unimplemented!(),
             }
         }
@@ -153,8 +150,8 @@ glib::wrapper! {
 }
 
 impl HealthView {
-    pub fn new<P: glib::IsA<gtk::Application>>(app: &P) -> Self {
-        glib::Object::new(&[("application", app)]).expect("Failed to create HealthView")
+    pub fn new() -> Self {
+        glib::Object::new(&[]).expect("Failed to create HealthView")
     }
 
     pub fn get_goal_label(&self) -> gtk::Label {
@@ -169,10 +166,10 @@ impl HealthView {
         imp::HealthView::from_instance(self).scrolled_window.get()
     }
 
-    properties_setter_getter!("empty_title", String);
-    properties_setter_getter!("icon_name", String);
+    properties_setter_getter!("empty-title", String);
+    properties_setter_getter!("icon-name", String);
     properties_setter_getter!("title", String);
-    properties_setter_getter!("view_title", String);
+    properties_setter_getter!("view-title", String);
 }
 
 unsafe impl<T: WidgetImpl> IsSubclassable<T> for HealthView {

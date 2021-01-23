@@ -7,7 +7,7 @@ mod imp {
     use super::*;
     use crate::core::{HealthDatabase, HealthSettings};
     use crate::views::HealthView;
-    use glib::subclass;
+    use glib::{clone, signal::Inhibit, subclass, SourceId};
     use gtk::subclass::prelude::*;
     use std::cell::RefCell;
     use std::collections::HashMap;
@@ -19,15 +19,24 @@ mod imp {
         WEIGHT,
     }
 
+    #[derive(Debug)]
+    pub struct HealthWindowMut {
+        current_height: i32,
+        current_width: i32,
+        current_view: ViewMode,
+        sync_source_id: Option<SourceId>,
+    }
+
     #[derive(Debug, CompositeTemplate)]
     pub struct HealthWindow {
-        pub current_view: RefCell<ViewMode>,
         pub db: HealthDatabase,
+        pub inner: RefCell<HealthWindowMut>,
         pub settings: HealthSettings,
         pub views: HashMap<ViewMode, HealthView>,
 
+        pub add_data_button: TemplateChild<gtk::Button>,
         #[template_child]
-        pub error_bar: TemplateChild<gtk::InfoBar>,
+        pub error_infobar: TemplateChild<gtk::InfoBar>,
         #[template_child]
         pub error_label: TemplateChild<gtk::Label>,
         #[template_child]
@@ -50,11 +59,17 @@ mod imp {
             views.insert(ViewMode::STEPS, HealthViewSteps::new().upcast());
 
             Self {
-                current_view: RefCell::new(ViewMode::STEPS),
                 db: HealthDatabase::new().unwrap(),
+                inner: RefCell::new(HealthWindowMut {
+                    current_height: 0,
+                    current_width: 0,
+                    current_view: ViewMode::STEPS,
+                    sync_source_id: None,
+                }),
                 settings: HealthSettings::new(),
                 views,
-                error_bar: TemplateChild::default(),
+                add_data_button: TemplateChild::default(),
+                error_infobar: TemplateChild::default(),
                 error_label: TemplateChild::default(),
                 primary_menu_popover: TemplateChild::default(),
                 stack: TemplateChild::default(),
@@ -95,10 +110,72 @@ mod imp {
                 let page = self.stack.add_titled(
                     view,
                     view.get_name().map(|s| s.to_string()).as_deref(),
-                    &view.get_view_title(),
+                    &view.get_view_title().unwrap(),
                 );
-                page.set_icon_name(&view.get_icon_name());
+                page.set_icon_name(&view.get_icon_name().unwrap());
             }
+
+            self.connect_handlers(obj);
+        }
+    }
+
+    impl HealthWindow {
+        pub fn show_error(&self, err_msg: &str) {
+            glib::g_warning!(crate::config::LOG_DOMAIN, "{}", err_msg);
+            self.error_label.set_text(err_msg);
+            self.error_infobar.set_revealed(true);
+        }
+
+        fn connect_handlers(&self, obj: &super::HealthWindow) {
+            self.error_infobar.connect_response(|bar, response| {
+                if response == gtk::ResponseType::Close {
+                    bar.set_revealed(false);
+                }
+            });
+            self.stack
+                .connect_property_visible_child_notify(clone!(@weak obj => move |s| {
+                    let child_name = s.get_visible_child_name().map(|s| s.to_string());
+                    let self_ = HealthWindow::from_instance(&obj);
+
+                    if child_name == self_.views.get(&ViewMode::STEPS).and_then(|s| s.get_name()).map(|s| s.to_string()) {
+                        self_.inner.borrow_mut().current_view = ViewMode::STEPS;
+                    }
+                }));
+            self.add_data_button
+                .connect_clicked(clone!(@weak obj => move |_| {
+                    let self_ = HealthWindow::from_instance(&obj);
+
+                    todo!();
+                }));
+
+            obj.connect_property_default_height_notify(move |w| {
+                HealthWindow::from_instance(w)
+                    .inner
+                    .borrow_mut()
+                    .current_height = w.get_property_default_height();
+            });
+            obj.connect_property_default_width_notify(move |w| {
+                HealthWindow::from_instance(w)
+                    .inner
+                    .borrow_mut()
+                    .current_width = w.get_property_default_width();
+            });
+            obj.connect_close_request(|w| {
+                let self_ = HealthWindow::from_instance(w);
+                let mut inner = self_.inner.borrow_mut();
+
+                self_
+                    .settings
+                    .set_window_is_maximized(w.get_property_maximized());
+                self_.settings.set_window_height(inner.current_height);
+                self_.settings.set_window_width(inner.current_width);
+
+                if let Some(source_id) = inner.sync_source_id.take() {
+                    glib::source_remove(source_id);
+                }
+
+                Inhibit(false)
+            });
         }
     }
 

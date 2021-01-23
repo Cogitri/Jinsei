@@ -8,10 +8,10 @@ mod imp {
     use crate::views::HealthGraphView;
     use chrono::Duration;
     use glib::{subclass, Cast};
-    use gtk::subclass::prelude::*;
+    use gtk::{subclass::prelude::*, CompositeTemplate, WidgetExt};
     use std::cell::RefCell;
 
-    #[derive(Debug)]
+    #[derive(Debug, CompositeTemplate)]
     pub struct HealthViewSteps {
         settings: HealthSettings,
         steps_graph_view: Option<HealthGraphView>,
@@ -20,7 +20,7 @@ mod imp {
 
     impl ObjectSubclass for HealthViewSteps {
         const NAME: &'static str = "HealthViewSteps";
-        type ParentType = gtk::Widget;
+        type ParentType = HealthView;
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
         type Type = super::HealthViewSteps;
@@ -35,6 +35,19 @@ mod imp {
                 settings,
                 steps_graph_view: None,
                 steps_graph_model: RefCell::new(steps_graph_model),
+            }
+        }
+
+        fn class_init(klass: &mut Self::Class) {
+            klass.set_template_from_resource("/dev/Cogitri/Health/ui/step_view.ui");
+            Self::bind_template_children(klass);
+        }
+
+        fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {
+            unsafe {
+                // FIXME: This really shouldn't be necessary.
+                let obj_ = obj.as_ref().clone();
+                obj_.upcast::<HealthView>().init_template();
             }
         }
     }
