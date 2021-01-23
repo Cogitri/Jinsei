@@ -141,12 +141,14 @@ mod imp {
                         self_.inner.borrow_mut().current_view = ViewMode::STEPS;
                     }
                 }));
+            /*
             self.add_data_button
-                .connect_clicked(clone!(@weak obj => move |_| {
-                    let self_ = HealthWindow::from_instance(&obj);
+            .connect_clicked(clone!(@weak obj => move |_| {
+                let self_ = HealthWindow::from_instance(&obj);
 
-                    todo!();
-                }));
+                todo!();
+            }));
+            */
 
             obj.connect_property_default_height_notify(move |w| {
                 HealthWindow::from_instance(w)
