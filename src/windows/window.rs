@@ -1,4 +1,4 @@
-use crate::views::HealthViewSteps;
+use crate::views::{HealthViewSteps, HealthViewWeight};
 use gdk::subclass::prelude::ObjectSubclass;
 use gtk::prelude::*;
 use gtk::{gio, glib, CompositeTemplate};
@@ -56,6 +56,7 @@ mod imp {
 
         fn new() -> Self {
             let mut views = HashMap::new();
+            views.insert(ViewMode::WEIGHT, HealthViewWeight::new().upcast());
             views.insert(ViewMode::STEPS, HealthViewSteps::new().upcast());
 
             Self {
@@ -139,6 +140,8 @@ mod imp {
 
                     if child_name == self_.views.get(&ViewMode::STEPS).and_then(|s| s.get_name()).map(|s| s.to_string()) {
                         self_.inner.borrow_mut().current_view = ViewMode::STEPS;
+                    } else if child_name == self_.views.get(&ViewMode::WEIGHT).and_then(|s| s.get_name()).map(|s| s.to_string()) {
+                        self_.inner.borrow_mut().current_view = ViewMode::WEIGHT;
                     }
                 }));
             /*
@@ -201,7 +204,13 @@ impl HealthWindow {
         for (mode, view) in &imp::HealthWindow::from_instance(self).views {
             match mode {
                 imp::ViewMode::STEPS => {
-                    let v = view.clone().downcast::<HealthViewSteps>().unwrap();
+                    let v = view.downcast_ref::<HealthViewSteps>().unwrap();
+                    let fut = v.update();
+                    //FIXME: don't block here!
+                    glib::MainContext::default().block_on(fut);
+                }
+                imp::ViewMode::WEIGHT => {
+                    let v = view.downcast_ref::<HealthViewWeight>().unwrap();
                     let fut = v.update();
                     //FIXME: don't block here!
                     glib::MainContext::default().block_on(fut);

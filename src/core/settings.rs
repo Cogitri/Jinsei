@@ -2,14 +2,16 @@ use crate::settings_getter_setter;
 use chrono::{DateTime, FixedOffset};
 use gio::prelude::*;
 use gio::Settings;
+use num_traits::{FromPrimitive, ToPrimitive};
+use uom::si::{f32::Mass, length::centimeter, mass::kilogram, u32::Length};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug, Clone, Copy, num_derive::FromPrimitive, num_derive::ToPrimitive)]
 pub enum Unitsystem {
     Imperial,
     Metric,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct HealthSettings {
     settings: Settings,
 }
@@ -51,16 +53,41 @@ impl HealthSettings {
             .unwrap();
     }
 
+    pub fn connect_unitsystem_changed<F: Fn(&Settings, &str) + 'static>(
+        &self,
+        f: F,
+    ) -> glib::SignalHandlerId {
+        self.settings.connect_changed(f)
+    }
+
     pub fn get_unitsystem(&self) -> Unitsystem {
-        match self.settings.get_enum("unitsystem") {
-            0 => Unitsystem::Imperial,
-            1 => Unitsystem::Metric,
-            _ => std::unreachable!(),
-        }
+        Unitsystem::from_i32(self.settings.get_enum("unitsystem")).unwrap()
     }
 
     pub fn set_unitsystem(&self, value: Unitsystem) {
-        self.settings.set_enum("unitsystem", value as i32).unwrap();
+        self.settings
+            .set_enum("unitsystem", value.to_i32().unwrap())
+            .unwrap();
+    }
+
+    pub fn get_user_height(&self) -> Length {
+        Length::new::<centimeter>(self.settings.get_uint("user-height"))
+    }
+
+    pub fn set_user_height(&self, value: Length) {
+        self.settings
+            .set_uint("user-height", value.get::<centimeter>())
+            .unwrap();
+    }
+
+    pub fn get_user_weightgoal(&self) -> Mass {
+        Mass::new::<kilogram>(self.settings.get_uint("user-weightgoal") as f32)
+    }
+
+    pub fn set_user_weightgoal(&self, value: Mass) {
+        self.settings
+            .set_uint("user-weightgoal", value.get::<kilogram>() as u32)
+            .unwrap();
     }
 
     settings_getter_setter!(u32, current_view_id, "current-view-id");
@@ -71,9 +98,7 @@ impl HealthSettings {
         "sync-provider-setup-google-fit"
     );
     settings_getter_setter!(u32, user_age, "user-age");
-    settings_getter_setter!(u32, user_height, "user-height");
     settings_getter_setter!(u32, user_stepgoal, "user-stepgoal");
-    settings_getter_setter!(u32, user_weight, "user-weight");
     settings_getter_setter!(i32, window_height, "window-height");
     settings_getter_setter!(bool, window_is_maximized, "window-is-maximized");
     settings_getter_setter!(i32, window_width, "window-width");

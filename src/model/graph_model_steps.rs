@@ -66,7 +66,6 @@ impl HealthGraphModelSteps {
     }
 
     pub async fn reload(&mut self, duration: Duration) -> Result<(), glib::Error> {
-        //FIXME: Allow reloading for more than 30 days
         self.vec = self
             .database
             .get_steps(

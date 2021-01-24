@@ -46,8 +46,7 @@ mod imp {
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {
             unsafe {
                 // FIXME: This really shouldn't be necessary.
-                let obj_ = obj.as_ref().clone();
-                obj_.upcast::<HealthView>().init_template();
+                obj.as_ref().upcast_ref::<HealthView>().init_template();
             }
         }
     }
@@ -71,7 +70,7 @@ mod imp {
                 );
             }
 
-            let view = obj.clone().upcast::<HealthView>();
+            let view = obj.upcast_ref::<HealthView>();
             view.set_title(i18n_f(
                 "Today's steps: {}",
                 &[&steps_graph_model
@@ -120,6 +119,12 @@ mod imp {
                 view.get_scrolled_window()
                     .set_child(Some(&steps_graph_view));
                 view.get_stack().set_visible_child_name("data_page");
+
+                self.settings
+                    .connect_user_stepgoal_changed(glib::clone!(@weak obj => move |_,_| {
+                        //FIXME: don't block here!
+                        glib::MainContext::default().block_on(HealthViewSteps::from_instance(&obj).update(&obj));
+                    }));
             }
         }
     }
