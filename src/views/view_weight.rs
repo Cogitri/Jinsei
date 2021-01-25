@@ -28,6 +28,7 @@ mod imp {
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
         type Type = super::HealthViewWeight;
+        type Interfaces = ();
 
         glib::object_subclass!();
 

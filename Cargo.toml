@@ -24,18 +24,22 @@ git = "https://github.com/gtk-rs/gtk4-rs"
 package = "gtk4"
 
 [dependencies.gio]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/sdroege/gtk-rs-monorepo"
+branch = "class-refactoring"
 features = ["v2_60"]
 
 [dependencies.glib]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/sdroege/gtk-rs-monorepo"
+branch = "class-refactoring"
 features = ["v2_60"]
 
 [dependencies.pango]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/sdroege/gtk-rs-monorepo"
+branch = "class-refactoring"
 
 [dependencies.pangocairo]
-git = "https://github.com/gtk-rs/gtk-rs"
+git = "https://github.com/sdroege/gtk-rs-monorepo"
+branch = "class-refactoring"
 
 [dependencies.libadwaita]
 git = "https://gitlab.gnome.org/bilelmoussaoui/libadwaita-rs"
@@ -63,4 +67,21 @@ version = "0.31"
 features = ["autoconvert", "f32", "si", "u32"]
 
 [dependencies.futures-util]
-version = "0.3.12"
+version = "0.3"
+
+[dependencies.once_cell]
+version = "1.5"
+
+[patch."https://github.com/gtk-rs/gtk-rs"]
+glib = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+glib-sys = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+gobject-sys = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+gio = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+gio-sys = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+gdk = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+gtk = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+pango = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+pangocairo = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+cairo-rs = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+cairo-sys-rs = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }
+pango-sys = { git = "https://github.com/sdroege/gtk-rs-monorepo", branch = "class-refactoring" }

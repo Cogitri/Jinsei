@@ -5,7 +5,7 @@ use gtk::{prelude::*, subclass::prelude::*};
 
 mod imp {
     use super::*;
-    use glib::subclass::{self, Property};
+    use glib::subclass;
     use std::cell::RefCell;
 
     #[derive(Debug, CompositeTemplate)]
@@ -27,45 +27,13 @@ mod imp {
         pub view_title: RefCell<String>,
     }
 
-    static PROPERTIES: [Property; 4] = [
-        Property("empty-subtitle", |name| {
-            glib::ParamSpec::string(
-                name,
-                "empty-subtitle",
-                "empty-subtitle",
-                None,
-                glib::ParamFlags::READWRITE,
-            )
-        }),
-        Property("icon-name", |name| {
-            glib::ParamSpec::string(
-                name,
-                "icon-name",
-                "icon-name",
-                None,
-                glib::ParamFlags::READWRITE,
-            )
-        }),
-        Property("title", |name| {
-            glib::ParamSpec::string(name, "title", "title", None, glib::ParamFlags::READWRITE)
-        }),
-        Property("view-title", |name| {
-            glib::ParamSpec::string(
-                name,
-                "view-title",
-                "view-title",
-                None,
-                glib::ParamFlags::READWRITE,
-            )
-        }),
-    ];
-
     impl ObjectSubclass for HealthView {
         const NAME: &'static str = "HealthView";
         type ParentType = gtk::Widget;
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
         type Type = super::HealthView;
+        type Interfaces = ();
 
         glib::object_subclass!();
 
@@ -84,7 +52,6 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.set_layout_manager_type::<gtk::BinLayout>();
-            klass.install_properties(&PROPERTIES);
             klass.set_template_from_resource("/dev/Cogitri/Health/ui/view.ui");
             Self::bind_template_children(klass);
         }
@@ -107,20 +74,60 @@ mod imp {
             }
         }
 
-        fn set_property(&self, _obj: &Self::Type, id: usize, value: &glib::Value) {
-            let prop = &PROPERTIES[id];
+        fn properties() -> &'static [glib::ParamSpec] {
+            use once_cell::sync::Lazy;
+            static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+                vec![
+                    glib::ParamSpec::string(
+                        "empty-subtitle",
+                        "empty-subtitle",
+                        "empty-subtitle",
+                        None,
+                        glib::ParamFlags::READWRITE,
+                    ),
+                    glib::ParamSpec::string(
+                        "icon-name",
+                        "icon-name",
+                        "icon-name",
+                        None,
+                        glib::ParamFlags::READWRITE,
+                    ),
+                    glib::ParamSpec::string(
+                        "title",
+                        "title",
+                        "title",
+                        None,
+                        glib::ParamFlags::READWRITE,
+                    ),
+                    glib::ParamSpec::string(
+                        "view-title",
+                        "view-title",
+                        "view-title",
+                        None,
+                        glib::ParamFlags::READWRITE,
+                    ),
+                ]
+            });
 
-            match *prop {
-                Property("empty-subtitle", ..) => self
+            PROPERTIES.as_ref()
+        }
+
+        fn set_property(
+            &self,
+            _obj: &Self::Type,
+            _id: usize,
+            value: &glib::Value,
+            pspec: &glib::ParamSpec,
+        ) {
+            match pspec.get_name() {
+                "empty-subtitle" => self
                     .subtitle_empty_view_label
                     .set_label(value.get().unwrap().unwrap_or("")),
-                Property("icon-name", ..) => {
-                    self.empty_icon.set_property_icon_name(value.get().unwrap())
-                }
-                Property("title", ..) => self
+                "icon-name" => self.empty_icon.set_property_icon_name(value.get().unwrap()),
+                "title" => self
                     .title_label
                     .set_label(value.get().unwrap().unwrap_or("")),
-                Property("view-title", ..) => {
+                "view-title" => {
                     self.view_title
                         .replace(value.get().unwrap().unwrap_or("".to_string()));
                 }
@@ -128,16 +135,17 @@ mod imp {
             }
         }
 
-        fn get_property(&self, _obj: &Self::Type, id: usize) -> glib::Value {
-            let prop = &PROPERTIES[id];
-
-            match *prop {
-                Property("empty-subtitle", ..) => {
-                    self.subtitle_empty_view_label.get_label().to_value()
-                }
-                Property("icon-name", ..) => self.empty_icon.get_icon_name().to_value(),
-                Property("title", ..) => self.title_label.get_label().to_value(),
-                Property("view-title", ..) => self.view_title.borrow().to_value(),
+        fn get_property(
+            &self,
+            _obj: &Self::Type,
+            _id: usize,
+            pspec: &glib::ParamSpec,
+        ) -> glib::Value {
+            match pspec.get_name() {
+                "empty-subtitle" => self.subtitle_empty_view_label.get_label().to_value(),
+                "icon-name" => self.empty_icon.get_icon_name().to_value(),
+                "title" => self.title_label.get_label().to_value(),
+                "view-title" => self.view_title.borrow().to_value(),
                 _ => unimplemented!(),
             }
         }

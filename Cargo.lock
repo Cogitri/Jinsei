@@ -30,7 +30,7 @@ checksum = "cf1de2fe8c75bc145a2f577add951f8134889b4795d47466a54a5c846d691693"
 [[package]]
 name = "cairo-rs"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "bitflags",
  "cairo-sys-rs",
@@ -43,7 +43,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "glib-sys",
  "libc",
@@ -259,7 +259,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -275,7 +275,7 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -287,7 +287,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "bitflags",
  "futures-channel",
@@ -305,7 +305,7 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "anyhow",
  "heck",
@@ -320,7 +320,7 @@ dependencies = [
 [[package]]
 name = "glib-sys"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "libc",
  "system-deps",
@@ -329,7 +329,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "glib-sys",
  "libc",
@@ -458,6 +458,7 @@ dependencies = [
  "libadwaita",
  "num-derive",
  "num-traits",
+ "once_cell",
  "pango",
  "pangocairo",
  "paste",
@@ -614,7 +615,7 @@ checksum = "13bd41f508810a131401606d54ac32a467c97172d74ba7662562ebba5ad07fa0"
 [[package]]
 name = "pango"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "bitflags",
  "glib",
@@ -626,7 +627,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -637,7 +638,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "bitflags",
  "cairo-rs",
@@ -650,7 +651,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.13.0"
-source = "git+https://github.com/gtk-rs/gtk-rs#2418edfb1dd4e511485a47ef7307620f5790ea96"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -905,6 +906,7 @@ version = "0.1.0"
 dependencies = [
  "bitflags",
  "gio",
+ "gio-sys",
  "glib",
  "glib-sys",
  "libc",
@@ -990,3 +992,13 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+
+[[patch.unused]]
+name = "gdk"
+version = "0.13.0"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"
+
+[[patch.unused]]
+name = "gtk"
+version = "0.13.0"
+source = "git+https://github.com/sdroege/gtk-rs-monorepo?branch=class-refactoring#8b74a4c10f7e220ab74498526abb04d86a318945"

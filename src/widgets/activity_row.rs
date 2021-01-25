@@ -1,3 +1,5 @@
+use crate::model::Activity;
+use gdk::subclass::prelude::ObjectSubclass;
 use gtk::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
@@ -5,7 +7,7 @@ mod imp {
     use super::*;
     use crate::{
         core::{i18n_f, settings::Unitsystem, HealthSettings},
-        model::{Activity, ActivityDataPoints, ActivityInfo},
+        model::{ActivityDataPoints, ActivityInfo},
     };
     use glib::subclass;
     use gtk::subclass::prelude::*;
@@ -57,6 +59,7 @@ mod imp {
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
         type Type = super::HealthActivityRow;
+        type Interfaces = ();
 
         glib::object_subclass!();
 
@@ -109,22 +112,22 @@ mod imp {
     impl ListBoxRowImpl for HealthActivityRow {}
 
     impl HealthActivityRow {
-        fn set_activity(&self, activity: Activity) {
-            let activity_info = ActivityInfo::from(activity.activity_type);
+        pub fn set_activity(&self, activity: Activity) {
+            let activity_info = ActivityInfo::from(activity.get_activity_type());
 
             self.active_minutes_label.set_label(&i18n_f(
                 "{} Minutes",
-                &[&activity.duration.num_minutes().to_string()],
+                &[&activity.get_duration().num_minutes().to_string()],
             ));
             self.activity_date_label
-                .set_text(&format!("{}", activity.date.format("%x")));
+                .set_text(&format!("{}", activity.get_date().format("%x")));
             self.activity_type_label.set_label(&activity_info.name);
 
             if activity_info
                 .available_data_points
                 .contains(ActivityDataPoints::CALORIES_BURNED)
             {
-                if let Some(calories_burned) = activity.calories_burned {
+                if let Some(calories_burned) = activity.get_calories_burned() {
                     self.calories_burned_label
                         .set_label(&i18n_f("{} Calories", &[&calories_burned.to_string()]));
                 }
@@ -134,19 +137,19 @@ mod imp {
                 .available_data_points
                 .contains(ActivityDataPoints::HEART_RATE)
             {
-                if activity.heart_rate_avg.unwrap_or(0) != 0 {
+                if activity.get_heart_rate_avg().unwrap_or(0) != 0 {
                     self.heart_rate_average_label
-                        .set_text(&activity.heart_rate_avg.unwrap().to_string());
+                        .set_text(&activity.get_heart_rate_avg().unwrap().to_string());
                     self.heart_rate_average_row.set_visible(true);
                 }
-                if activity.heart_rate_max.unwrap_or(0) != 0 {
+                if activity.get_heart_rate_max().unwrap_or(0) != 0 {
                     self.heart_rate_maximum_label
-                        .set_text(&activity.heart_rate_max.unwrap().to_string());
+                        .set_text(&activity.get_heart_rate_max().unwrap().to_string());
                     self.heart_rate_maximum_row.set_visible(true);
                 }
-                if activity.heart_rate_min.unwrap_or(0) != 0 {
+                if activity.get_heart_rate_min().unwrap_or(0) != 0 {
                     self.heart_rate_minimum_label
-                        .set_text(&activity.heart_rate_min.unwrap().to_string());
+                        .set_text(&activity.get_heart_rate_min().unwrap().to_string());
                     self.heart_rate_minimum_row.set_visible(true);
                 }
             }
@@ -155,7 +158,7 @@ mod imp {
                 .available_data_points
                 .contains(ActivityDataPoints::DISTANCE)
             {
-                if let Some(distance) = activity.distance {
+                if let Some(distance) = activity.get_distance() {
                     self.distance_row.set_visible(true);
 
                     if self.settings.get_unitsystem() == Unitsystem::Imperial {
@@ -183,5 +186,9 @@ glib::wrapper! {
 impl HealthActivityRow {
     pub fn new() -> Self {
         glib::Object::new(&[]).expect("Failed to create HealthActivityRow")
+    }
+
+    pub fn set_activity(&self, activity: Activity) {
+        imp::HealthActivityRow::from_instance(&self).set_activity(activity);
     }
 }

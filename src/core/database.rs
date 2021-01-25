@@ -44,35 +44,42 @@ impl HealthDatabase {
 
         let mut ret = Vec::new();
         while cursor.next_async_future().await.is_ok() {
-            let mut activity = Activity::default();
+            let activity = Activity::new();
 
             for i in 0..cursor.get_n_columns() {
                 match cursor.get_variable_name(i).unwrap().as_str() {
                     "id" => {
-                        activity.activity_type =
-                            ActivityType::from_i64(cursor.get_integer(i)).unwrap()
+                        activity.set_activity_type(
+                            ActivityType::from_i64(cursor.get_integer(i)).unwrap(),
+                        );
                     }
                     "date" => {
-                        activity.date =
-                            DateTime::parse_from_rfc3339(cursor.get_string(i).0.as_str()).unwrap()
+                        activity.set_date(
+                            DateTime::parse_from_rfc3339(cursor.get_string(i).0.as_str()).unwrap(),
+                        );
                     }
                     "calories_burned" => {
-                        activity.calories_burned = Some(cursor.get_integer(i) as u32)
+                        activity.set_calories_burned(Some(cursor.get_integer(i) as u32));
                     }
                     "distance" => {
-                        activity.distance = Some(Length::new::<meter>(cursor.get_integer(i) as u32))
+                        activity
+                            .set_distance(Some(Length::new::<meter>(cursor.get_integer(i) as u32)));
                     }
                     "heart_rate_avg" => {
-                        activity.heart_rate_avg = Some(cursor.get_integer(i) as u32)
+                        activity.set_heart_rate_avg(Some(cursor.get_integer(i) as u32));
                     }
                     "heart_rate_max" => {
-                        activity.heart_rate_max = Some(cursor.get_integer(i) as u32)
+                        activity.set_heart_rate_max(Some(cursor.get_integer(i) as u32));
                     }
                     "heart_rate_min" => {
-                        activity.heart_rate_min = Some(cursor.get_integer(i) as u32)
+                        activity.set_heart_rate_min(Some(cursor.get_integer(i) as u32));
                     }
-                    "minutes" => activity.duration = Duration::minutes(cursor.get_integer(i)),
-                    "steps" => activity.steps = Some(cursor.get_integer(i) as u32),
+                    "minutes" => {
+                        activity.set_duration(Duration::minutes(cursor.get_integer(i)));
+                    }
+                    "steps" => {
+                        activity.set_steps(Some(cursor.get_integer(i) as u32));
+                    }
                     _ => unimplemented!(),
                 }
             }
@@ -132,34 +139,34 @@ impl HealthDatabase {
     pub async fn save_activity(&self, activity: Activity) -> Result<(), glib::Error> {
         let resource = tracker::Resource::new(None);
         resource.set_uri("rdf:type", "health:Activity");
-        resource.set_string("health:activity_date", &activity.date.to_rfc3339());
+        resource.set_string("health:activity_date", &activity.get_date().to_rfc3339());
         resource.set_int64(
             "health:activity_id",
-            activity.activity_type.to_u32().unwrap().into(),
+            activity.get_activity_type().to_u32().unwrap().into(),
         );
 
-        if let Some(c) = activity.calories_burned {
+        if let Some(c) = activity.get_calories_burned() {
             resource.set_int64("health:calories_burned", c.into());
         }
-        if let Some(d) = activity.distance {
+        if let Some(d) = activity.get_distance() {
             resource.set_int64(
                 "health:distance",
                 d.get::<uom::si::length::kilometer>().into(),
             );
         }
-        if let Some(avg) = activity.heart_rate_avg {
+        if let Some(avg) = activity.get_heart_rate_avg() {
             resource.set_int64("health:heart_rate_avg", avg.into());
         }
-        if let Some(max) = activity.heart_rate_max {
+        if let Some(max) = activity.get_heart_rate_max() {
             resource.set_int64("health:heart_rate_max", max.into());
         }
-        if let Some(min) = activity.heart_rate_min {
+        if let Some(min) = activity.get_heart_rate_min() {
             resource.set_int64("health:heart_rate_min", min.into());
         }
-        if activity.duration.num_minutes() != 0 {
-            resource.set_int64("health:minutes", activity.duration.num_minutes());
+        if activity.get_duration().num_minutes() != 0 {
+            resource.set_int64("health:minutes", activity.get_duration().num_minutes());
         }
-        if let Some(s) = activity.steps {
+        if let Some(s) = activity.get_steps() {
             resource.set_int64("health:steps", s.into());
         }
 

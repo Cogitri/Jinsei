@@ -39,6 +39,7 @@ mod imp {
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
         type Type = super::HealthBMILevelBar;
+        type Interfaces = ();
 
         glib::object_subclass!();
 
