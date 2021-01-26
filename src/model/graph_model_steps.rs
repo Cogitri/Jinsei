@@ -49,6 +49,10 @@ impl HealthGraphModelSteps {
     }
 
     fn get_streak_count(steps: &[&Steps], step_goal: u32) -> u32 {
+        if steps.is_empty() {
+            return 0;
+        }
+
         let mut streak: u32 = 0;
         let last_date = steps.get(0).unwrap().date;
 

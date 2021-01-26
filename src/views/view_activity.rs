@@ -17,10 +17,8 @@ mod imp {
     pub struct HealthViewActivity {
         settings: HealthSettings,
         activity_model: HealthModelActivity,
-        #[template_child]
-        activies_list_box: TemplateChild<gtk::ListBox>,
-        #[template_child]
-        clamp: TemplateChild<libadwaita::Clamp>,
+        activities_list_box: gtk::ListBox,
+        clamp: libadwaita::Clamp,
     }
 
     impl ObjectSubclass for HealthViewActivity {
@@ -34,11 +32,28 @@ mod imp {
         glib::object_subclass!();
 
         fn new() -> Self {
+            let activities_list_box = gtk::ListBoxBuilder::new()
+                .can_focus(false)
+                .selection_mode(gtk::SelectionMode::None)
+                .build();
+            activities_list_box.add_css_class("content");
+            let clamp_builder = libadwaita::ClampBuilder::new()
+                .maximum_size(800)
+                .tightening_threshold(600)
+                .valign(gtk::Align::Center)
+                .vexpand(true)
+                .hexpand(true)
+                .margin_end(6)
+                .margin_bottom(6)
+                .margin_start(6)
+                .margin_top(6)
+                .child(&activities_list_box);
+
             Self {
                 settings: HealthSettings::new(),
                 activity_model: HealthModelActivity::new(),
-                activies_list_box: TemplateChild::default(),
-                clamp: TemplateChild::default(),
+                activities_list_box,
+                clamp: clamp_builder.build(),
             }
         }
 
@@ -61,10 +76,10 @@ mod imp {
             self.parent_constructed(obj);
 
             let scrolled_window = obj.upcast_ref::<HealthView>().get_scrolled_window();
-            scrolled_window.set_child(Some(&self.clamp.get()));
+            scrolled_window.set_child(Some(&self.clamp));
             scrolled_window.set_property_vscrollbar_policy(gtk::PolicyType::Automatic);
 
-            self.activies_list_box
+            self.activities_list_box
                 .bind_model(Some(&self.activity_model), |o| {
                     let row = HealthActivityRow::new();
                     row.set_activity(o.clone().downcast::<Activity>().unwrap());
@@ -83,7 +98,7 @@ mod imp {
                 );
             }
 
-            if self.activity_model.is_empty() {
+            if !self.activity_model.is_empty() {
                 obj.upcast_ref::<HealthView>()
                     .get_stack()
                     .set_visible_child_name("data_page");

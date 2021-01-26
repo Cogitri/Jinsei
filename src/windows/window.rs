@@ -10,13 +10,13 @@ mod imp {
     use glib::{clone, signal::Inhibit, subclass, SourceId};
     use gtk::subclass::prelude::*;
     use std::cell::RefCell;
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
-    #[derive(Debug, PartialEq, Eq, Hash)]
+    #[derive(Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
     pub enum ViewMode {
-        ACTIVITIES,
         STEPS,
         WEIGHT,
+        ACTIVITIES,
     }
 
     #[derive(Debug)]
@@ -33,7 +33,7 @@ mod imp {
         pub db: HealthDatabase,
         pub inner: RefCell<HealthWindowMut>,
         pub settings: HealthSettings,
-        pub views: HashMap<ViewMode, HealthView>,
+        pub views: BTreeMap<ViewMode, HealthView>,
 
         pub add_data_button: TemplateChild<gtk::Button>,
         #[template_child]
@@ -57,7 +57,7 @@ mod imp {
         glib::object_subclass!();
 
         fn new() -> Self {
-            let mut views = HashMap::new();
+            let mut views = BTreeMap::new();
             views.insert(ViewMode::ACTIVITIES, HealthViewActivity::new().upcast());
             views.insert(ViewMode::WEIGHT, HealthViewWeight::new().upcast());
             views.insert(ViewMode::STEPS, HealthViewSteps::new().upcast());

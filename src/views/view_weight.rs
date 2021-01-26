@@ -65,7 +65,11 @@ mod imp {
     }
 
     impl HealthViewWeight {
-        fn update_weightgoal_label(&self, obj: &crate::views::HealthViewWeight) {
+        fn update_weightgoal_label(
+            &self,
+            obj: &crate::views::HealthViewWeight,
+            model: &HealthGraphModelWeight,
+        ) {
             let weightgoal = self.settings.get_user_weightgoal();
             let unitsystem = self.settings.get_unitsystem();
             let (weight_value, translation) = if unitsystem == Unitsystem::Imperial {
@@ -73,7 +77,6 @@ mod imp {
             } else {
                 (weightgoal.get::<kilogram>(), i18n("kilogram"))
             };
-            let model = self.weight_graph_model.borrow();
             let goal_label = obj.upcast_ref::<HealthView>().get_goal_label();
 
             if weight_value > 0.1 && model.is_empty() {
@@ -107,8 +110,8 @@ mod imp {
             }
         }
 
-        fn get_bmi(&self) -> String {
-            if let Some(last_weight) = self.weight_graph_model.borrow().get_last_weight() {
+        fn get_bmi(&self, model: &HealthGraphModelWeight) -> String {
+            if let Some(last_weight) = model.get_last_weight() {
                 let height = self.settings.get_user_height().get::<meter>();
                 let bmi = last_weight.get::<kilogram>() as f32 / (height * height) as f32;
                 format!("{bmi:.2}", bmi = bmi)
@@ -128,8 +131,11 @@ mod imp {
             }
 
             let view = obj.upcast_ref::<HealthView>();
-            view.set_title(i18n_f("Current BMI: {}", &[&self.get_bmi()]));
-            self.update_weightgoal_label(obj);
+            view.set_title(i18n_f(
+                "Current BMI: {}",
+                &[&self.get_bmi(&weight_graph_model)],
+            ));
+            self.update_weightgoal_label(obj, &weight_graph_model);
 
             if let Some(view) = &self.weight_graph_view {
                 view.set_points(weight_graph_model.to_points());

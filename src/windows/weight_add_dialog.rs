@@ -24,54 +24,33 @@ mod imp {
     };
 
     #[derive(Debug, CompositeTemplate)]
-    #[template(resource = "/dev/Cogitri/Health/ui/preferences_window.ui")]
-    pub struct HealthPreferencesWindow {
-        pub parent_window: RefCell<Option<gtk::Window>>,
+    #[template(resource = "/dev/Cogitri/Health/ui/weight_add_dialog.ui")]
+    pub struct HealthWeightAddDialog {
+        pub db: HealthDatabase,
         pub settings: HealthSettings,
 
         #[template_child]
-        pub height_actionrow: TemplateChild<libadwaita::ActionRow>,
+        pub date_selector: TemplateChild<HealthDateSelector>,
         #[template_child]
-        pub weightgoal_actionrow: TemplateChild<libadwaita::ActionRow>,
-        #[template_child]
-        pub age_spin_button: TemplateChild<gtk::SpinButton>,
-        #[template_child]
-        pub height_spin_button: TemplateChild<gtk::SpinButton>,
-        #[template_child]
-        pub stepgoal_spin_button: TemplateChild<gtk::SpinButton>,
-        #[template_child]
-        pub weightgoal_spin_button: TemplateChild<gtk::SpinButton>,
-        #[template_child]
-        pub unit_imperial_togglebutton: TemplateChild<gtk::ToggleButton>,
-        #[template_child]
-        pub unit_metric_togglebutton: TemplateChild<gtk::ToggleButton>,
-        #[template_child]
-        pub bmi_levelbar: TemplateChild<HealthBMILevelBar>,
+        pub weight_spin_button: TemplateChild<gtk::SpinButton>,
     }
 
-    impl ObjectSubclass for HealthPreferencesWindow {
-        const NAME: &'static str = "HealthPreferencesWindow";
+    impl ObjectSubclass for HealthWeightAddDialog {
+        const NAME: &'static str = "HealthWeightAddDialog";
         type ParentType = libadwaita::PreferencesWindow;
         type Instance = subclass::simple::InstanceStruct<Self>;
         type Class = subclass::simple::ClassStruct<Self>;
-        type Type = super::HealthPreferencesWindow;
+        type Type = super::HealthWeightAddDialog;
         type Interfaces = ();
 
         glib::object_subclass!();
 
         fn new() -> Self {
             Self {
+                db: HealthDatabase,
                 settings: HealthSettings::new(),
-                height_actionrow: TemplateChild::default(),
-                weightgoal_actionrow: TemplateChild::default(),
-                age_spin_button: TemplateChild::default(),
-                height_spin_button: TemplateChild::default(),
-                stepgoal_spin_button: TemplateChild::default(),
-                weightgoal_spin_button: TemplateChild::default(),
-                unit_imperial_togglebutton: TemplateChild::default(),
-                unit_metric_togglebutton: TemplateChild::default(),
-                bmi_levelbar: TemplateChild::default(),
-                parent_window: RefCell::new(None),
+                date_selector: TemplateChild::default(),
+                weight_spin_button: TemplateChild::default(),
             }
         }
 
@@ -84,7 +63,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for HealthPreferencesWindow {
+    impl ObjectImpl for HealthWeightAddDialog {
         fn constructed(&self, obj: &Self::Type) {
             self.parent_constructed(obj);
 
@@ -127,16 +106,16 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for HealthPreferencesWindow {}
-    impl WindowImpl for HealthPreferencesWindow {}
-    impl libadwaita::subclass::window::AdwWindowImpl for HealthPreferencesWindow {}
-    impl libadwaita::subclass::preferences_window::PreferencesWindowImpl for HealthPreferencesWindow {}
+    impl WidgetImpl for HealthWeightAddDialog {}
+    impl WindowImpl for HealthWeightAddDialog {}
+    impl libadwaita::subclass::window::AdwWindowImpl for HealthWeightAddDialog {}
+    impl libadwaita::subclass::preferences_window::PreferencesWindowImpl for HealthWeightAddDialog {}
 
-    impl HealthPreferencesWindow {
-        fn connect_handlers(&self, obj: &super::HealthPreferencesWindow) {
+    impl HealthWeightAddDialog {
+        fn connect_handlers(&self, obj: &super::HealthWeightAddDialog) {
             self.age_spin_button
                 .connect_changed(clone!(@weak obj => move |_| {
-                    let self_ = imp::HealthPreferencesWindow::from_instance(&obj);
+                    let self_ = imp::HealthWeightAddDialog::from_instance(&obj);
                     let val = get_spinbutton_value::<u32>(&self_.age_spin_button);
                     if val != 0 {
                         self_.settings.set_user_age(val);
@@ -145,7 +124,7 @@ mod imp {
 
             self.stepgoal_spin_button
                 .connect_changed(clone!(@weak obj => move |_| {
-                    let self_ = imp::HealthPreferencesWindow::from_instance(&obj);
+                    let self_ = imp::HealthWeightAddDialog::from_instance(&obj);
                     let val = get_spinbutton_value::<u32>(&self_.stepgoal_spin_button);
                     if val != 0 {
                         self_.settings.set_user_stepgoal(val);
@@ -154,7 +133,7 @@ mod imp {
 
             self.weightgoal_spin_button
                 .connect_changed(clone!(@weak obj => move |_| {
-                    let self_ = imp::HealthPreferencesWindow::from_instance(&obj);
+                    let self_ = imp::HealthWeightAddDialog::from_instance(&obj);
                     let val = get_spinbutton_value::<f32>(&self_.weightgoal_spin_button);
                     if val != 0.0 {
                         let weight = if self_.unit_metric_togglebutton.get_active() {
@@ -169,7 +148,7 @@ mod imp {
 
             self.height_spin_button
                 .connect_changed(clone!(@weak obj => move |_| {
-                    let self_ = imp::HealthPreferencesWindow::from_instance(&obj);
+                    let self_ = imp::HealthWeightAddDialog::from_instance(&obj);
                     let val = get_spinbutton_value::<u32>(&self_.height_spin_button);
                     if val != 0 {
                         let height = if self_.unit_metric_togglebutton.get_active() {
@@ -183,7 +162,7 @@ mod imp {
                 }));
 
             self.unit_metric_togglebutton.connect_toggled(clone!(@weak obj => move |btn| {
-                let self_ = imp::HealthPreferencesWindow::from_instance(&obj);
+                let self_ = imp::HealthWeightAddDialog::from_instance(&obj);
                 if btn.get_active() {
                     self_.settings.set_unitsystem(Unitsystem::Metric);
                     self_.bmi_levelbar.set_unitsystem(Unitsystem::Metric);
@@ -213,12 +192,12 @@ mod imp {
 }
 
 glib::wrapper! {
-    pub struct HealthPreferencesWindow(ObjectSubclass<imp::HealthPreferencesWindow>)
+    pub struct HealthWeightAddDialog(ObjectSubclass<imp::HealthWeightAddDialog>)
         @extends gtk::Widget, gtk::Window, libadwaita::PreferencesWindow;
 }
 
-impl HealthPreferencesWindow {
+impl HealthWeightAddDialog {
     pub fn new() -> Self {
-        glib::Object::new(&[]).expect("Failed to create HealthPreferencesWindow")
+        glib::Object::new(&[]).expect("Failed to create HealthWeightAddDialog")
     }
 }

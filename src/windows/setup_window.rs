@@ -7,7 +7,7 @@ static OPTIMAL_BMI: f32 = 22.5;
 mod imp {
     use super::*;
     use crate::{
-        core::{i18n, settings::Unitsystem, HealthSettings},
+        core::{i18n, settings::Unitsystem, utils::get_spinbutton_value, HealthSettings},
         widgets::{HealthBMILevelBar, HealthSyncListBox},
     };
     use glib::{
@@ -66,19 +66,6 @@ mod imp {
         pub weightgoal_actionrow: TemplateChild<libadwaita::ActionRow>,
         #[template_child]
         pub setup_carousel: TemplateChild<libadwaita::Carousel>,
-    }
-
-    fn get_spinbutton_value<T>(spin_button: &gtk::SpinButton) -> T
-    where
-        T: std::str::FromStr,
-        <T as std::str::FromStr>::Err: std::fmt::Debug,
-    {
-        spin_button
-            .get_text()
-            .unwrap()
-            .as_str()
-            .parse::<T>()
-            .unwrap()
     }
 
     impl ObjectSubclass for HealthSetupWindow {
