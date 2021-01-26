@@ -16,6 +16,7 @@ mod imp {
     use uom::si::length::{meter, yard};
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/activity_row.ui")]
     pub struct HealthActivityRow {
         pub activity: RefCell<Option<Activity>>,
         pub settings: HealthSettings,
@@ -87,8 +88,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/activity_row.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

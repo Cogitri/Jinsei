@@ -13,6 +13,7 @@ mod imp {
     use gtk::{subclass::prelude::*, CompositeTemplate, WidgetExt};
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/activity_view.ui")]
     pub struct HealthViewActivity {
         settings: HealthSettings,
         activity_model: HealthModelActivity,
@@ -42,8 +43,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/activity_view.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

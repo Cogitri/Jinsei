@@ -1,13 +1,12 @@
-use crate::windows::HealthWindow;
 use crate::{config, core::settings::HealthSettings};
 use gtk::{gio, glib};
 
 mod imp {
-    use std::{cell::RefCell, unimplemented};
-
     use super::*;
+    use crate::windows::{HealthSetupWindow, HealthWindow};
     use glib::{g_warning, subclass};
     use gtk::{subclass::prelude::*, WidgetExt};
+    use std::cell::RefCell;
 
     #[derive(Debug)]
     pub struct HealthApplication {
@@ -54,8 +53,8 @@ mod imp {
                 window.show();
                 self.window.replace(glib::ObjectExt::downgrade(&window));
             } else {
-                // create SetupWindow
-                unimplemented!();
+                let setup_window = HealthSetupWindow::new(application);
+                setup_window.show();
             }
         }
 

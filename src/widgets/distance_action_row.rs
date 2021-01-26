@@ -13,6 +13,7 @@ mod imp {
     use uom::si::length::{kilometer, meter, mile, yard};
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/distance_action_row.ui")]
     pub struct HealthDistanceActionRow {
         pub settings: HealthSettings,
         pub value: RefCell<Length>,
@@ -48,8 +49,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/distance_action_row.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

@@ -9,6 +9,7 @@ mod imp {
     use std::cell::RefCell;
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/view.ui")]
     pub struct HealthView {
         #[template_child]
         pub empty_icon: TemplateChild<gtk::Image>,
@@ -52,8 +53,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.set_layout_manager_type::<gtk::BinLayout>();
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/view.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

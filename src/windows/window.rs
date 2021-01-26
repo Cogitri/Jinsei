@@ -1,4 +1,4 @@
-use crate::views::{HealthViewSteps, HealthViewWeight};
+use crate::views::{HealthViewActivity, HealthViewSteps, HealthViewWeight};
 use gdk::subclass::prelude::ObjectSubclass;
 use gtk::prelude::*;
 use gtk::{gio, glib, CompositeTemplate};
@@ -28,6 +28,7 @@ mod imp {
     }
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/window.ui")]
     pub struct HealthWindow {
         pub db: HealthDatabase,
         pub inner: RefCell<HealthWindowMut>,
@@ -57,6 +58,7 @@ mod imp {
 
         fn new() -> Self {
             let mut views = HashMap::new();
+            views.insert(ViewMode::ACTIVITIES, HealthViewActivity::new().upcast());
             views.insert(ViewMode::WEIGHT, HealthViewWeight::new().upcast());
             views.insert(ViewMode::STEPS, HealthViewSteps::new().upcast());
 
@@ -79,8 +81,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/window.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {
@@ -118,6 +119,7 @@ mod imp {
             }
 
             self.connect_handlers(obj);
+            obj.update();
         }
     }
 
@@ -205,18 +207,23 @@ impl HealthWindow {
         for (mode, view) in &imp::HealthWindow::from_instance(self).views {
             match mode {
                 imp::ViewMode::STEPS => {
-                    let v = view.downcast_ref::<HealthViewSteps>().unwrap();
-                    let fut = v.update();
-                    //FIXME: don't block here!
-                    glib::MainContext::default().block_on(fut);
+                    let v = view.clone().downcast::<HealthViewSteps>().unwrap();
+                    glib::MainContext::default().spawn_local(async move {
+                        v.update().await;
+                    });
                 }
                 imp::ViewMode::WEIGHT => {
-                    let v = view.downcast_ref::<HealthViewWeight>().unwrap();
-                    let fut = v.update();
-                    //FIXME: don't block here!
-                    glib::MainContext::default().block_on(fut);
+                    let v = view.clone().downcast::<HealthViewWeight>().unwrap();
+                    glib::MainContext::default().spawn_local(async move {
+                        v.update().await;
+                    });
                 }
-                _ => unimplemented!(),
+                imp::ViewMode::ACTIVITIES => {
+                    let v = view.clone().downcast::<HealthViewActivity>().unwrap();
+                    glib::MainContext::default().spawn_local(async move {
+                        v.update().await;
+                    });
+                }
             }
         }
     }

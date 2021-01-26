@@ -10,6 +10,7 @@ mod imp {
     use std::cell::RefCell;
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/activity_type_row.ui")]
     pub struct HealthActivityTypeRow {
         pub activity_type_id: RefCell<&'static str>,
         #[template_child]
@@ -37,8 +38,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/activity_type_row.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

@@ -16,6 +16,7 @@ mod imp {
     };
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/weight_view.ui")]
     pub struct HealthViewWeight {
         settings: HealthSettings,
         weight_graph_view: Option<HealthGraphView>,
@@ -44,8 +45,7 @@ mod imp {
         }
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/weight_view.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {

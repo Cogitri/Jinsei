@@ -1,18 +1,16 @@
+use crate::{core::settings::Unitsystem, imp_getter_setter};
 use gdk::subclass::prelude::ObjectSubclass;
 use gtk::prelude::*;
 use gtk::{glib, CompositeTemplate};
+use uom::si::{f32::Mass, u32::Length};
 
 mod imp {
     use super::*;
-    use crate::core::{settings::Unitsystem, HealthSettings};
+    use crate::core::HealthSettings;
     use glib::subclass;
     use gtk::subclass::prelude::*;
     use std::cell::RefCell;
-    use uom::si::{
-        f32::{Length, Mass},
-        length::meter,
-        mass::kilogram,
-    };
+    use uom::si::{length::centimeter, mass::kilogram};
 
     static LEVEL_BAR_MIN: f32 = 13.5;
     static LEVEL_BAR_MAX: f32 = 30.0;
@@ -25,6 +23,7 @@ mod imp {
     }
 
     #[derive(Debug, CompositeTemplate)]
+    #[template(resource = "/dev/Cogitri/Health/ui/bmi_level_bar.ui")]
     pub struct HealthBMILevelBar {
         pub inner: RefCell<HealthBMILevelBarMut>,
         #[template_child]
@@ -46,7 +45,7 @@ mod imp {
         fn new() -> Self {
             Self {
                 inner: RefCell::new(HealthBMILevelBarMut {
-                    height: Length::new::<meter>(0.0),
+                    height: Length::new::<centimeter>(0),
                     weight: Mass::new::<kilogram>(0.0),
                     unitsystem: Unitsystem::Metric,
                 }),
@@ -58,8 +57,7 @@ mod imp {
         fn class_init(klass: &mut Self::Class) {
             klass.set_layout_manager_type::<gtk::BoxLayout>();
             klass.set_accessible_role(gtk::AccessibleRole::Meter);
-            klass.set_template_from_resource("/dev/Cogitri/Health/ui/bmi_level_bar.ui");
-            Self::bind_template_children(klass);
+            Self::bind_template(klass);
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self::Type>) {
@@ -144,7 +142,7 @@ mod imp {
         }
 
         fn recalcualte_bmi(&self) {
-            let height = self.inner.borrow().height.get::<meter>();
+            let height = self.inner.borrow().height.get::<centimeter>() as f32 / 100.0;
             let weight = self.inner.borrow().weight.get::<kilogram>();
             if height != 0.0 && weight != 0.0 {
                 let current_bmi = weight / (height * height);
@@ -175,4 +173,12 @@ impl HealthBMILevelBar {
     pub fn new() -> Self {
         glib::Object::new(&[]).expect("Failed to create HealthBMILevelBar")
     }
+
+    fn get_priv(&self) -> &imp::HealthBMILevelBar {
+        imp::HealthBMILevelBar::from_instance(self)
+    }
+
+    imp_getter_setter!(height, Length);
+    imp_getter_setter!(unitsystem, Unitsystem);
+    imp_getter_setter!(weight, Mass);
 }
